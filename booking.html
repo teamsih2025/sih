@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+    .payment-methods {
+        margin-top: 18px;
+        margin-bottom: 8px;
+        background: #f5f5f5;
+        border-radius: 8px;
+        padding: 22px 20px 18px 20px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+        max-width: 340px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .payment-methods label[for="payment-title"] {
+        font-weight: 700;
+        font-size: 1.15rem;
+        color: #388e3c;
+        display: block;
+        margin-bottom: 16px;
+        text-align: left;
+    }
+    .payment-options {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 18px;
+    }
+    .payment-options label {
+        background: #fff;
+        border-radius: 6px;
+        padding: 10px 14px;
+        font-size: 1rem;
+        color: #333;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        cursor: pointer;
+        transition: background 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .payment-options label:hover {
+        background: #e3f2fd;
+    }
+    .payment-options input[type="radio"] {
+        accent-color: #388e3c;
+        width: 18px;
+        height: 18px;
+        margin-right: 8px;
+    }
+    /* Inline CSS for booking page (except header) */
+    .booking-section {
+        max-width: 700px;
+        margin: 48px auto;
+        background: #fff;
+        border-radius: 14px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.10);
+        padding: 48px 36px 36px 36px;
+        position: relative;
+    }
+    .booking-title {
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 24px;
+        color: #2e7d32;
+        font-weight: 700;
+    }
+    .booking-details {
+        margin-bottom: 24px;
+    }
+    .booking-card {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        background: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+        padding: 16px;
+        margin-bottom: 16px;
+    }
+    .booking-card .machinery-img {
+        width: 180px;
+        height: 140px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #eee;
+    }
+    .booking-card .machinery-info {
+        flex: 1;
+    }
+    .booking-card .machinery-desc {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #333;
+    }
+    .booking-card .machinery-price {
+        font-size: 1rem;
+        color: #388e3c;
+        font-weight: 500;
+    }
+    .booking-confirm {
+        text-align: center;
+        font-size: 1.2rem;
+        color: #1976d2;
+        font-weight: 600;
+        margin-top: 12px;
+        background: #e3f2fd;
+        border-radius: 6px;
+        padding: 10px 0;
+    }
+    .back-btn {
+        position: absolute;
+        top: 18px;
+        left: 18px;
+        background: #f5f5f5;
+        border: none;
+        color: #333;
+        font-size: 1rem;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+        transition: background 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .back-btn:hover {
+        background: #e0e0e0;
+    }
+    @media (max-width: 600px) {
+        .booking-section {
+            max-width: 98vw;
+            padding: 16px 6px 16px 6px;
+        }
+        .booking-card .machinery-img {
+            width: 70px;
+            height: 56px;
+        }
+    }
+    </style>
+</head>
+<body>
+    <header class="ks-header">
+        <div class="ks-logo-title">
+            <img src="assests/logo.png" alt="Logo" class="ks-logo">
+            <span class="ks-title">किसान सेवा</span>
+        </div>
+        <form class="ks-search-bar">
+            <input type="text" placeholder="सेवा खोजें..." class="ks-search-input">
+            <button type="submit" class="ks-search-btn"><i class="fa fa-search"></i></button>
+        </form>
+        <div class="ks-actions">
+            <button class="ks-lang-btn"><i class="fa fa-language"></i></button>
+            <button class="ks-login-btn" onclick="window.location.href='login.html'">Login</button>
+        </div>
+    </header>
+    <main>
+        <section class="booking-section">
+            <button class="back-btn" onclick="window.location.href='index.html'">
+                <i class="fa fa-arrow-left"></i> Back
+            </button>
+            <h2 class="booking-title">Confirm Booking</h2>
+            <div class="booking-details" id="booking-details">
+                <!-- Booking details will be rendered here -->
+            </div>
+        </section>
+    </main>
+    <script>
+    // Get booking data from query string
+    function getBookingData() {
+        const params = new URLSearchParams(window.location.search);
+        return {
+            img: params.get('img'),
+            title: params.get('title'),
+            price: params.get('price')
+        };
+    }
+    function renderBookingDetails() {
+        const data = getBookingData();
+        const container = document.getElementById('booking-details');
+        if (!data.img || !data.title || !data.price) {
+            container.innerHTML = '<p>Booking details not found.</p>';
+            return;
+        }
+        container.innerHTML = `
+            <div class="machinery-card booking-card">
+                <img src="${data.img}" alt="${data.title}" class="machinery-img">
+                <div class="machinery-info">
+                    <div class="machinery-desc">${data.title}</div>
+                    <div class="machinery-price">${data.price}</div>
+                </div>
+            </div>
+            <div class="payment-methods">
+                <label for="payment-title">Choose Payment Method:</label>
+                <div class="payment-options">
+                    <label><input type="radio" name="payment" value="UPI" checked> <span>UPI</span></label>
+                    <label><input type="radio" name="payment" value="Cash on Delivery"> <span>Cash on Delivery</span></label>
+                </div>
+                <button id="final-book-btn" style="width:100%;background:#388e3c;color:#fff;font-size:1.1rem;padding:12px 0;border:none;border-radius:6px;cursor:pointer;font-weight:600;">Book</button>
+            </div>
+            <div id="booking-complete-msg" style="display:none;text-align:center;font-size:1.2rem;color:#1976d2;font-weight:600;margin-top:18px;background:#e3f2fd;border-radius:6px;padding:10px 0;"></div>
+            <div id="tracking-btn-container" style="display:none;text-align:center;margin-top:18px;">
+                <button id="tracking-btn" style="background:#388e3c;color:#fff;font-size:1rem;padding:10px 32px;border:none;border-radius:6px;cursor:pointer;font-weight:600;">Tracking</button>
+            </div>
+            <div id="tracking-map-container" style="display:none;text-align:center;margin-top:18px;">
+                <iframe id="tracking-map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3600.096551801355!2d77.72709597539288!3d25.53516057749482!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3970c77e5b537133%3A0x5062d50418ad45e8!2sUniversity%20Institute%20of%20Technology%20RGPV%20Shivpuri!5e0!3m2!1sen!2sin!4v1757760096000!5m2!1sen!2sin" width="340" height="220" style="border:0;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,0.12);" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+            <div id="upi-popup" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.35);z-index:999;align-items:center;justify-content:center;">
+                <div style="background:#fff;padding:32px 24px;border-radius:12px;box-shadow:0 2px 16px rgba(0,0,0,0.18);text-align:center;max-width:320px;margin:auto;">
+                    <h3 style="margin-bottom:18px;color:#388e3c;">Scan UPI QR Code</h3>
+                    <img id="upi-qr-img" src="" alt="UPI QR" style="width:180px;height:180px;object-fit:cover;border-radius:8px;border:1px solid #eee;margin-bottom:18px;">
+                    <br>
+                    <button id="scan-btn" style="background:#1976d2;color:#fff;font-size:1rem;padding:10px 32px;border:none;border-radius:6px;cursor:pointer;font-weight:600;">Scanned</button>
+                </div>
+            </div>
+        `;
+        document.getElementById('final-book-btn').onclick = function() {
+            const upiRadio = document.querySelector('input[name="payment"][value="UPI"]');
+            const showTrackingBtn = () => {
+                document.getElementById('tracking-btn-container').style.display = 'block';
+                document.getElementById('tracking-btn').onclick = function() {
+                    document.getElementById('tracking-map-container').style.display = 'block';
+                };
+            };
+            if (upiRadio && upiRadio.checked) {
+                // Show QR code popup
+                const qrCodes = [
+                    'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=1234567890@upi',
+                    'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=9876543210@upi',
+                    'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=5555555555@upi',
+                    'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=1112223334@upi'
+                ];
+                const randomQR = qrCodes[Math.floor(Math.random() * qrCodes.length)];
+                document.getElementById('upi-qr-img').src = randomQR;
+                document.getElementById('upi-popup').style.display = 'flex';
+                document.getElementById('scan-btn').onclick = function() {
+                    document.getElementById('upi-popup').style.display = 'none';
+                    document.getElementById('booking-complete-msg').textContent = 'Booking is complete';
+                    document.getElementById('booking-complete-msg').style.display = 'block';
+                    showTrackingBtn();
+                };
+            } else {
+                document.getElementById('booking-complete-msg').textContent = 'Booking is complete';
+                document.getElementById('booking-complete-msg').style.display = 'block';
+                showTrackingBtn();
+            }
+        };
+    }
+    renderBookingDetails();
+    </script>
+</body>
+</html>
